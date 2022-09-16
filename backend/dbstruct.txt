@@ -1,0 +1,29 @@
+users
+- _id
+- nome
+- email
+- passwordHash
+- token
+- biotipo
+- peso
+
+biotipo
+- _id
+- nomedobiotipo
+
+refeicao
+- _id
+- nome
+- cal
+- image ({url, default: true})
+- idUser
+- descricao
+- dateCreated
+
+treino
+- _id
+- idUser
+- dia_da_semana
+- nome
+- repetiçoes
+- carga
