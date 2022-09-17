@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const Auth = require('./middlewares/Auth');
+
 const AuthController = require('./controllers/authController');
 const RefeicaoController = require('./controllers/refeicaoController');
 const TreinoController = require('./controllers/treinoController');
@@ -17,23 +19,39 @@ router.post('/user/signup', AuthController.signup);
 
 // UserController
 router.post('/user', UserController.addUser); // CREATE
-router.get('/user/me', UserController.info); // READ
-router.put('/user/me', AuthController.editAction); // UPDATE
-router.delete('/user/:id', AuthController.deleteUser); // DELETE
+router.get('/user/me', Auth.private, UserController.info); // READ
+router.put('/user/me', Auth.private, AuthController.editAction); // UPDATE
+router.delete('/user/:id', Auth.private, AuthController.deleteUser); // DELETE
 
 // TreinoController
 
-router.post('/treino/add', TreinoController.addTreino); // CREATE
+router.post('/treino/add', Auth.private, TreinoController.addTreino); // CREATE
 router.get('/treino/list', TreinoController.getTreino); // READ
-router.get('/treino/item', TreinoController.getItem); // READ
-router.post('/treino/:id', TreinoController.editAction); // UPDATE
-router.delete('/treino/:id', TreinoController.deleteItem); // DELETE
+router.get('/treino/item', Auth.private, TreinoController.getItem); // READ
+router.post('/treino/:id', Auth.private, TreinoController.editAction); // UPDATE
+router.delete(
+    '/treino/:id',
+    Auth.private,
+    TreinoController.deleteItem,
+); // DELETE
 
 // RefeicaoController
-router.post('/refeicao/add', RefeicaoController.addRefeicao); // CREATE
+router.post(
+    '/refeicao/add',
+    Auth.private,
+    RefeicaoController.addRefeicao,
+); // CREATE
 router.get('/refeicao/list', RefeicaoController.getRefeicao); // READ
 router.get('/refeicao/item', RefeicaoController.getItem); // READ
-router.post('/refeicao/:id', RefeicaoController.editAction); // UPDATE
-router.delete('/refeicao/:id', RefeicaoController.deleteItem); // DELETE
+router.post(
+    '/refeicao/:id',
+    Auth.private,
+    RefeicaoController.editAction,
+); // UPDATE
+router.delete(
+    '/refeicao/:id',
+    Auth.private,
+    RefeicaoController.deleteItem,
+); // DELETE
 
 module.exports = router;

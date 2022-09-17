@@ -1,8 +1,7 @@
-const User = require('../models/user');
+// const User = require('../models/user');
 
 module.exports = {
   addUser: async (req, res) => {
-      
   },
   info: async (req, res) => {
   },
