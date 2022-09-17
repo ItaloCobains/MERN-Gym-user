@@ -6,10 +6,7 @@ users
 - token
 - biotipo
 - peso
-
-biotipo
-- _id
-- nomedobiotipo
+- biotipo
 
 refeicao
 - _id

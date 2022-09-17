@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const fileupload = require('express-fileupload');
 
+const apiRoutes = require('./src/routes');
+
 mongoose.connect(process.env.DATABASE_URL);
 
 mongoose.Promise = global.Promise;
@@ -19,9 +21,7 @@ server.use(express.urlencoded({extended: true}));
 server.use(fileupload());
 server.use(express.static(__dirname + '/public'));
 
-server.get('/ping', (req, res) => {
-  res.json({pong: true});
-});
+server.use('/', apiRoutes);
 
 server.listen(process.env.PORT, () => {
   console.log('Express server listening on base: ', process.env.BASE_URL);
