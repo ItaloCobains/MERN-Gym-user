@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const modelSchema = new mongoose.Schema({
-  name: String,
+  nome: String,
   email: String,
   password: String,
   token: String,

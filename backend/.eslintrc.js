@@ -12,5 +12,6 @@ module.exports = {
   },
   'rules': {
     'new-cap': 'off',
+    'object-curly-spacing': 'off',
   },
 };

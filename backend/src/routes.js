@@ -3,6 +3,8 @@ const router = express.Router();
 
 const Auth = require('./middlewares/Auth');
 
+const AuthValidator = require('./validators/authValidator');
+
 const AuthController = require('./controllers/authController');
 const RefeicaoController = require('./controllers/refeicaoController');
 const TreinoController = require('./controllers/treinoController');
@@ -15,7 +17,7 @@ router.get('/ping', (req, res) => {
 // AuthController
 router.post('/user/signin', AuthController.signin);
 
-router.post('/user/signup', AuthController.signup);
+router.post('/user/signup', AuthValidator.signup, AuthController.signup);
 
 // UserController
 router.post('/user', UserController.addUser); // CREATE
