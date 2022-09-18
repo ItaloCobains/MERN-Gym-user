@@ -33,4 +33,17 @@ module.exports = {
       errorMessage: 'Peso invalido.',
     },
   }),
+  signin: checkSchema({
+    email: {
+      isEmail: true,
+      normalizeEmail: true,
+      errorMessage: 'Email invalido.',
+    },
+    password: {
+      isLength: {
+        options: { min: 10 },
+      },
+      errorMessage: 'Password precisa ter pelo menos 10 caracteres.',
+    },
+  }),
 };

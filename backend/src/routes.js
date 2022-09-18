@@ -15,7 +15,7 @@ router.get('/ping', (req, res) => {
 });
 
 // AuthController
-router.post('/user/signin', AuthController.signin);
+router.post('/user/signin', AuthValidator.signin, AuthController.signin);
 
 router.post('/user/signup', AuthValidator.signup, AuthController.signup);
 
