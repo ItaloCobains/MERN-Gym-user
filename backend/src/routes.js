@@ -22,8 +22,8 @@ router.post('/user/signup', AuthValidator.signup, AuthController.signup);
 // UserController
 router.post('/user', UserController.addUser); // CREATE
 router.get('/user/me', Auth.private, UserController.info); // READ
-router.put('/user/me', Auth.private, AuthController.editAction); // UPDATE
-router.delete('/user/:id', Auth.private, AuthController.deleteUser); // DELETE
+router.put('/user/me', Auth.private, UserController.editAction); // UPDATE
+router.delete('/user/:id', Auth.private, UserController.deleteUser); // DELETE
 
 // TreinoController
 

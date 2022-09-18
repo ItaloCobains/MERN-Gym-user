@@ -5,9 +5,9 @@ module.exports = {
     nome: {
       trim: true,
       isLength: {
-        options: {min: 20},
+        options: {min: 10},
       },
-      errorMessage: 'Nome precisa ter pelo menos 20 caracteres.',
+      errorMessage: 'Nome precisa ter pelo menos 10 caracteres.',
     },
     email: {
       isEmail: true,
@@ -16,9 +16,21 @@ module.exports = {
     },
     password: {
       isLength: {
-        options: {min: 15},
+        options: {min: 10},
       },
-      errorMessage: 'Password precisa ter pelo menos 15 caracteres.',
+      errorMessage: 'Password precisa ter pelo menos 10 caracteres.',
+    },
+    biotipo: {
+      trim: true,
+      isLength: {
+        options: {min: 9},
+      },
+      errorMessage: 'Biotipo invalido.',
+    },
+    peso: {
+      trim: true,
+      isDecimal: true,
+      errorMessage: 'Peso invalido.',
     },
   }),
 };
