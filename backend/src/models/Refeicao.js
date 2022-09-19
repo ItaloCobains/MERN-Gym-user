@@ -1,3 +1,4 @@
+/* A model for the database. */
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 

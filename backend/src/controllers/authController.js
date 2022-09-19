@@ -3,6 +3,8 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 module.exports = {
+  /* This is the signin function. It is validating the user's data and creating
+    a new user. */
   signin: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,6 +41,8 @@ module.exports = {
 
     res.json({ token, email: data.email });
   },
+  /* This is the signup function. It is validating the user's data and creating
+  a new user. */
   signup: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

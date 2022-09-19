@@ -1,3 +1,4 @@
+/* A validation schema for the signup and signin routes. */
 const {checkSchema} = require('express-validator');
 
 module.exports = {

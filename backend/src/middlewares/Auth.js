@@ -1,6 +1,7 @@
 const User = require('../models/user');
 
 module.exports = {
+  /* A middleware function that checks if the user is logged in or not. */
   private: async (req, res, next) => {
     if (!req.query.token && !req.body.token) {
       res.json({notAllowed: true});
