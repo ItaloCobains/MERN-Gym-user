@@ -77,7 +77,7 @@ module.exports = {
     if (
       data.biotipo !== 'ectomorfo' &&
       data.biotipo !== 'mesomorfo' &&
-      data.biotipo !== 'endoformo') {
+      data.biotipo !== 'endomorfo') {
       res.status(400).json({
         error: {
           biotipo: {

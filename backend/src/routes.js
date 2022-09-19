@@ -4,6 +4,7 @@ const router = express.Router();
 const Auth = require('./middlewares/Auth');
 
 const AuthValidator = require('./validators/authValidator');
+const UserValidator = require('./validators/userValidator');
 
 const AuthController = require('./controllers/authController');
 const RefeicaoController = require('./controllers/refeicaoController');
@@ -21,7 +22,12 @@ router.post('/user/signup', AuthValidator.signup, AuthController.signup);
 
 // UserController
 router.get('/user/me', Auth.private, UserController.info); // READ
-router.put('/user/me', Auth.private, UserController.editAction); // UPDATE
+router.put(
+    '/user/me',
+    UserValidator.editAction,
+    Auth.private,
+    UserController.editAction,
+); // UPDATE
 
 // TreinoController
 
