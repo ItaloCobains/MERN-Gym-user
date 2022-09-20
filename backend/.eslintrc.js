@@ -14,5 +14,6 @@ module.exports = {
     'new-cap': 'off',
     'object-curly-spacing': 'off',
     'prefer-const': 'off',
+    'valid-jsdoc': 'off',
   },
 };

@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 
 
 module.exports = {
+  /* A function that is called when the user wants to see his profile. */
   info: async (req, res) => {
     const { token } = req.query;
 
@@ -39,6 +40,7 @@ module.exports = {
       treinos: treinoList,
     });
   },
+  /* A function that is called when the user wants to edit his profile. */
   editAction: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
