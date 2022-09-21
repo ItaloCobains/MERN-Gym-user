@@ -3,6 +3,7 @@ const jimp = require('jimp');
 
 const User = require('../models/User');
 const Refeicao = require('../models/Refeicao');
+const { default: mongoose } = require('mongoose');
 
 
 /**
@@ -71,9 +72,11 @@ module.exports = {
     const info = await newRefeicao.save();
     res.json({ id: info._id });
   },
+  /* A function that is called when a user wants to get all the meals that
+* he has
+  added. */
   getRefeicao: async (req, res) => {
-    // const { sort = 'asc', offset = 0, limit = 8, q } = req.query;
-    const {token} = req.query;
+    const { token } = req.query;
 
     const user = await User.findOne({ token }).exec();
 
@@ -106,11 +109,115 @@ module.exports = {
 
     res.json({ refeicao });
   },
+  /* Getting the id from the params and checking if it is valid.
+  If it is valid, it is getting the meal from the database and returning it. */
   getItem: async (req, res) => {
+    const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({ error: 'Id invalido' });
+      return;
+    }
+
+    const refeicao = await Refeicao.findById({ _id: id });
+
+    if (!refeicao) {
+      res.json({ error: 'Not Found' });
+      return;
+    }
+
+    let images = [];
+    for (const img of refeicao.image) {
+      images.push(`${process.env.BASE_URL}/media/${img.url}`);
+    }
+
+    const resposta = {
+      nome: refeicao.nome,
+      cal: refeicao.cal,
+      images,
+      descricao: refeicao.descricao,
+      dateCreated: refeicao.dateCreated,
+    };
+
+    res.status(200).json({
+      resposta,
+    });
   },
   editAction: async (req, res) => {
+    let { id } = req.params;
+    let { token, nome, cal, images, descricao } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.json({ error: 'id invalido' });
+      return;
+    }
+
+    const refeicao = await Refeicao.findById(id).exec();
+
+    if (!refeicao) {
+      res.json({ error: 'Not Found' });
+      return;
+    }
+
+    const user = await User.findOne({ token }).exec();
+    if (user._id.toString() !== refeicao.idUser) {
+      res.json({ error: 'Essa refeição nãp e sua.' });
+      return;
+    }
+
+    let updates = {};
+
+    if (nome) {
+      updates.nome = nome;
+    }
+
+    if (cal) {
+      cal = parseFloat(cal);
+      updates.cal = cal;
+    }
+
+    if (descricao) {
+      updates.descricao = descricao;
+    }
+
+    if (images) {
+      updates.images = images;
+    }
+
+    await Refeicao.findByIdAndUpdate(id, {
+      $set: updates,
+    });
+
+    // todo novas images
+
+    const RefI = await Refeicao.findById(id);
+    if (req.files && req.files.img) {
+      if (req.files.img.length == undefined) {
+        if (['image/jpeg', 'image/jpg', 'image/png']
+            .includes(req.files.img.mimetype)) {
+          let url = await addImage(req.files.img.data);
+          RefI.image.push({
+            url,
+            default: false,
+          });
+        }
+      } else {
+        for (let i = 0; i < req.files.img.length; i++) {
+          if (['image/jpeg', 'image/jpg', 'image/png']
+              .includes(req.files.img[i].mimetype)) {
+            let url = await addImage(req.files.img[i].data);
+            RefI.images.push({
+              url,
+              default: false,
+            });
+          }
+        }
+      }
+    }
+
+    RefI.image = [...RefI.image];
+    await RefI.save();
+    res.json({ error: '' });
   },
   deleteItem: async (req, res) => {
 

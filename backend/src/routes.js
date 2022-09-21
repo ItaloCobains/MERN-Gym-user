@@ -49,7 +49,7 @@ router.post(
 ); // CREATE
 router.get('/refeicao/list', Auth.private, RefeicaoController.getRefeicao);
 // READ
-router.get('/refeicao/item', RefeicaoController.getItem); // READ
+router.get('/refeicao/:id', RefeicaoController.getItem); // READ
 router.post(
     '/refeicao/:id',
     Auth.private,
