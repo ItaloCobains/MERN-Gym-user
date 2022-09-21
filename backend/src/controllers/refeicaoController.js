@@ -4,6 +4,7 @@ const jimp = require('jimp');
 const User = require('../models/User');
 const Refeicao = require('../models/Refeicao');
 
+
 /**
  * It takes a buffer, creates a new name for the image, reads the buffer,
  * resizes
@@ -71,7 +72,39 @@ module.exports = {
     res.json({ id: info._id });
   },
   getRefeicao: async (req, res) => {
+    // const { sort = 'asc', offset = 0, limit = 8, q } = req.query;
+    const {token} = req.query;
 
+    const user = await User.findOne({ token }).exec();
+
+
+    const refeicaoData = await Refeicao.find({ idUser: user._id }).exec();
+
+    let refeicao = [];
+
+    // eslint-disable-next-line guard-for-in
+    for (let i in refeicaoData) {
+      let image;
+
+      let defaultImg = refeicaoData[i].image.find((e) => e.default);
+
+      if (defaultImg) {
+        image = `${process.env.BASE_URL}/media/${defaultImg.url}`;
+      } else {
+        image = `${process.env.BASE_URL}/media/default.jpg`;
+      }
+
+      refeicao.push({
+        id: refeicaoData._id,
+        nome: refeicaoData.nome,
+        cal: refeicaoData.cal,
+        descricao: refeicaoData.descricao,
+        dateCreated: refeicaoData.dateCreated,
+        image,
+      });
+    };
+
+    res.json({ refeicao });
   },
   getItem: async (req, res) => {
 

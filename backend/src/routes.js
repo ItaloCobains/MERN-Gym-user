@@ -47,7 +47,8 @@ router.post(
     Auth.private,
     RefeicaoController.addRefeicao,
 ); // CREATE
-router.get('/refeicao/list', RefeicaoController.getRefeicao); // READ
+router.get('/refeicao/list', Auth.private, RefeicaoController.getRefeicao);
+// READ
 router.get('/refeicao/item', RefeicaoController.getItem); // READ
 router.post(
     '/refeicao/:id',
