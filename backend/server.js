@@ -6,6 +6,7 @@ const fileupload = require('express-fileupload');
 
 const router = require('./src/routes');
 
+/* Connecting to the database. */
 mongoose.connect(process.env.DATABASE_URL);
 
 mongoose.Promise = global.Promise;

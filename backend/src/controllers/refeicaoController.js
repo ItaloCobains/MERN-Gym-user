@@ -161,7 +161,7 @@ module.exports = {
 
     const user = await User.findOne({ token }).exec();
     if (user._id.toString() !== refeicao.idUser) {
-      res.json({ error: 'Essa refeição nãp e sua.' });
+      res.json({ error: 'Essa refeição não e sua.' });
       return;
     }
 
@@ -220,6 +220,25 @@ module.exports = {
     res.json({ error: '' });
   },
   deleteItem: async (req, res) => {
+    const { id } = req.params;
+    const { token } = req.params.token;
 
+    const user = await User.findOne({ token }).exec();
+
+    if (!user) {
+      res.status(400).json({ error: 'Not Found' });
+      return;
+    }
+
+    const refeicao = await Refeicao.findById(id).exec();
+
+    if (!refeicao) {
+      res.json({ error: 'Refeicao not found' });
+      return;
+    }
+
+    await Refeicao.findByIdAndDelete(id);
+
+    res.status(200).json({ status: true });
   },
 };

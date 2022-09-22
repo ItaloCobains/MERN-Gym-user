@@ -33,7 +33,7 @@ router.put(
 
 router.post('/treino/add', Auth.private, TreinoController.addTreino); // CREATE
 router.get('/treino/list', TreinoController.getTreino); // READ
-router.get('/treino/item', Auth.private, TreinoController.getItem); // READ
+router.get('/treino/:id', Auth.private, TreinoController.getItem); // READ
 router.post('/treino/:id', Auth.private, TreinoController.editAction); // UPDATE
 router.delete(
     '/treino/:id',
