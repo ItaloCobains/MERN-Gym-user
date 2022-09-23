@@ -1,12 +1,8 @@
 import React from 'react'
 
 import { CSidebar, CSidebarBrand, CSidebarNav } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
-
-import { logoNegative } from 'src/assets/brand/logo-negative'
-import { sygnet } from 'src/assets/brand/sygnet'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
@@ -18,8 +14,8 @@ const AppSidebar = () => {
   return (
     <CSidebar position="fixed">
       <CSidebarBrand className="d-none d-md-flex" to="/">
-        <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} />
-        <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
+        {/*  eslint-disable-next-line jsx-a11y/alt-text */}
+        <img src="/GYM - MERN.png" className="mt-2 mb-3 m1-auto mr-auto" width="70%" />
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
