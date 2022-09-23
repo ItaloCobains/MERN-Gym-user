@@ -11,7 +11,7 @@ const baseUrl = 'http://localhost:5000'
  */
 const request = async (method, endpoint, params, token = null) => {
   method = method.toLowerCase()
-  let fullUrl = `${baseUrl}${method}`
+  let fullUrl = `${baseUrl}${endpoint}`
   let body = null
   // eslint-disable-next-line default-case
   switch (method) {
@@ -43,7 +43,7 @@ export default () => {
 
     validateToken: async () => {
       let token = localStorage.getItem('token')
-      let json = await request('post', '/user/validate', {}, token)
+      let json = await request('post', '/user/validate', { token })
       return json
     },
 

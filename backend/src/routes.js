@@ -20,6 +20,8 @@ router.post('/user/signin', AuthValidator.signin, AuthController.signin);
 
 router.post('/user/signup', AuthValidator.signup, AuthController.signup);
 
+router.post('/user/validate', AuthController.validate);
+
 // UserController
 router.get('/user/me', Auth.private, UserController.info); // READ
 router.put(

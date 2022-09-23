@@ -108,4 +108,17 @@ module.exports = {
 
     res.status(200).json({ token });
   },
+
+  validate: async (req, res) => {
+    const { token } = req.body;
+
+    const user = await User.findOne({token});
+
+    if (!user) {
+      res.status(400).json({error: 'Not Found'});
+      return;
+    }
+
+    res.json({token});
+  },
 };
