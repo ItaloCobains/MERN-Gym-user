@@ -44,7 +44,7 @@ module.exports = {
       isLength: {
         options: { min: 10 },
       },
-      errorMessage: 'Password precisa ter pelo menos 10 caracteres.',
+      errorMessage: 'Senha precisa ter pelo menos 10 caracteres.',
     },
   }),
 };
