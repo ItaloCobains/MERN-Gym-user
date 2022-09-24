@@ -26,9 +26,9 @@ const request = async (method, endpoint, params, token = null) => {
       break
   }
   let headers = { 'Content-Type': 'application/json' }
-  if (token) {
-    headers.Authorization = `Bearer ${token}`
-  }
+  // if (token) {
+  //   headers.Authorization = `Bearer ${token}`
+  // }
   let req = await fetch(fullUrl, { method, headers, body })
   let json = await req.json()
   return json

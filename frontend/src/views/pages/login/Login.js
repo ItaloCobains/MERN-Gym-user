@@ -1,6 +1,7 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
+  CAlert,
   CButton,
   CCard,
   CCardBody,
@@ -15,8 +16,43 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import useApi from '../../../services/api'
 
 const Login = () => {
+  const api = useApi()
+  const navigate = useNavigate()
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  const handleLoginButton = async () => {
+    if (email && password) {
+      const result = await api.login(email, password)
+      if (result.error === '') {
+        localStorage.setItem('token', result.token)
+        navigate('/')
+      } else {
+        const emailError = result.error.hasOwnProperty('email') ? result.error.email.msg : ''
+        const passowordError = result.error.hasOwnProperty('password')
+          ? result.error.password.msg
+          : ''
+        if (emailError && passowordError) {
+          const LabelRetorn = `${emailError} e ${passowordError}`
+          setError(LabelRetorn)
+        } else if (emailError) {
+          setError(emailError)
+        } else if (passowordError) {
+          setError(passowordError)
+        } else {
+          setError(result.error)
+        }
+      }
+    } else {
+      setError('Digite os dados')
+    }
+  }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -27,12 +63,20 @@ const Login = () => {
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-medium-emphasis">Sign In to your account</p>
+                    <p className="text-medium-emphasis">Digite seus dados de acesso</p>
+
+                    {error !== '' && <CAlert color="danger">{error}</CAlert>}
+
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput
+                        type="email"
+                        placeholder="E-mail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -40,19 +84,15 @@ const Login = () => {
                       </CInputGroupText>
                       <CFormInput
                         type="password"
-                        placeholder="Password"
-                        autoComplete="current-password"
+                        placeholder="Senha"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
-                          Login
-                        </CButton>
-                      </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
+                        <CButton color="primary" className="px-4" onClick={handleLoginButton}>
+                          Entrar
                         </CButton>
                       </CCol>
                     </CRow>
