@@ -26,10 +26,14 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
+  const [loading, setLoading] = useState(false)
+
   const handleLoginButton = async () => {
     if (email && password) {
+      setLoading(true)
       const result = await api.login(email, password)
-      if (result.error === '') {
+      setLoading(false)
+      if (!result.hasOwnProperty('error')) {
         localStorage.setItem('token', result.token)
         navigate('/')
       } else {
@@ -38,6 +42,7 @@ const Login = () => {
           ? result.error.password.msg
           : ''
         if (emailError && passowordError) {
+          console.log(emailError)
           const LabelRetorn = `${emailError} e ${passowordError}`
           setError(LabelRetorn)
         } else if (emailError) {
@@ -76,6 +81,7 @@ const Login = () => {
                         placeholder="E-mail"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        disabled={loading}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
@@ -87,12 +93,18 @@ const Login = () => {
                         placeholder="Senha"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        disabled={loading}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4" onClick={handleLoginButton}>
-                          Entrar
+                        <CButton
+                          color="primary"
+                          className="px-4"
+                          onClick={handleLoginButton}
+                          disabled={loading}
+                        >
+                          {loading ? 'Carregando' : 'Entrar'}
                         </CButton>
                       </CCol>
                     </CRow>
