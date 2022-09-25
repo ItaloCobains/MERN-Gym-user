@@ -51,5 +51,9 @@ export default () => {
       let json = await request('post', '/user/signin', { email, password })
       return json
     },
+    logout: async () => {
+      localStorage.removeItem('token')
+      return
+    },
   }
 }
