@@ -17,7 +17,8 @@ const request = async (method, endpoint, params, token = null) => {
   switch (method) {
     case 'get':
       let queryString = new URLSearchParams(params).toString()
-      fullUrl += `?${queryString}}`
+      fullUrl += `?${queryString}`
+      console.log(fullUrl)
       break
     case 'post':
     case 'put':
@@ -54,6 +55,18 @@ export default () => {
     logout: async () => {
       localStorage.removeItem('token')
       return
+    },
+    getRefeicao: async () => {
+      let token = localStorage.getItem('token')
+      let url = `${baseUrl}/refeicao/list?token=${token}`
+      let req = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      let json = await req.json()
+      return json
     },
   }
 }
