@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/User');
 
 module.exports = {
   /* A middleware function that checks if the user is logged in or not. */

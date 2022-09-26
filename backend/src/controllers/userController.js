@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const Refeicao = require('../models/refeicao');
+const User = require('../models/User');
+const Refeicao = require('../models/Refeicao');
 const Treino = require('../models/Treino');
 const { validationResult, matchedData } = require('express-validator');
 const bcrypt = require('bcrypt');
