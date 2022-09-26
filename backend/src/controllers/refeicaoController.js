@@ -98,20 +98,20 @@ module.exports = {
       }
 
       refeicao.push({
-        id: refeicaoData._id,
-        nome: refeicaoData.nome,
-        cal: refeicaoData.cal,
-        descricao: refeicaoData.descricao,
-        dateCreated: refeicaoData.dateCreated,
+        id: refeicaoData[i]._id,
+        nome: refeicaoData[i].nome,
+        cal: refeicaoData[i].cal,
+        descricao: refeicaoData[i].descricao,
+        dateCreated: refeicaoData[i].dateCreated,
         image,
       });
     };
 
-    res.json({ refeicao });
+    res.json({ refeicao, error: '' });
   },
   /* Getting the id from the params and checking if it is valid.
   If it is valid, it is getting the meal from the database and returning it. */
-  getItem: async (req, res) => {
+  getItem: async (req, _res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

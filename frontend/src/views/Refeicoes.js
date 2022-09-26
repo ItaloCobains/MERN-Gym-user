@@ -2,7 +2,17 @@ import CIcon from '@coreui/icons-react'
 
 import { cilCheck } from '@coreui/icons'
 
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
+import {
+  CButton,
+  CButtonGroup,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableDataCell,
+} from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
 import useApi from './../services/api'
@@ -12,6 +22,41 @@ const Refeicao = () => {
 
   const [loading, setLoading] = useState(true)
   const [list, setList] = useState([])
+
+  const fields = [
+    {
+      key: 'id',
+      label: '#',
+      _props: { scope: 'col' },
+      _style: { width: '1px' },
+    },
+    {
+      key: 'dateCreated',
+      label: 'Date de criação',
+      _props: { scope: 'col' },
+    },
+    {
+      key: 'nome',
+      label: 'Nome',
+      _props: { scope: 'col' },
+    },
+    {
+      key: 'cal',
+      label: 'Calorias',
+      _props: { scope: 'col' },
+      _style: { width: '1px' },
+    },
+    {
+      key: 'descricao',
+      label: 'Descrição',
+      _props: { scope: 'col' },
+    },
+    // {
+    //   key: 'image',
+    //   label: 'Image',
+    //   _props: { scope: 'col' },
+    // },
+  ]
 
   useEffect(() => {
     getList()
@@ -35,12 +80,30 @@ const Refeicao = () => {
 
         <CCard>
           <CCardHeader>
-            <CButton color="primary">
+            <CButton color="primary" style={{ marginRight: '15px' }}>
               <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
               Nova Refeição
             </CButton>
+            <CButton color="info" style={{ marginRight: '15px' }}>
+              <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
+              Editar Refeição
+            </CButton>
+            <CButton color="danger">
+              <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
+              Excluir Refeição
+            </CButton>
           </CCardHeader>
-          <CCardBody>...</CCardBody>
+          <CCardBody>
+            <CTable
+              stripedColumns
+              items={list}
+              columns={fields}
+              loading={loading}
+              noItemsViewSlot=" "
+              hover
+              bordered
+            />
+          </CCardBody>
         </CCard>
       </CCol>
     </CRow>
