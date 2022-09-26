@@ -68,5 +68,11 @@ export default () => {
       let json = await req.json()
       return json
     },
+    updateRefeição: async (id, body) => {
+      let token = localStorage.getItem('token')
+      body = { ...body, token }
+      let json = await request('post', `/refeicao/${id}`, body)
+      return json
+    },
   }
 }
