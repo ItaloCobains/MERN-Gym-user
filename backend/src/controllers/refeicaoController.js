@@ -70,7 +70,7 @@ module.exports = {
     }
 
     const info = await newRefeicao.save();
-    res.json({ id: info._id });
+    res.json({ id: info._id, error: '' });
   },
   /* A function that is called when a user wants to get all the meals that
 * he has

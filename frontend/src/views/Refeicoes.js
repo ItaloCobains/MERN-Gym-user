@@ -35,12 +35,18 @@ const Refeicao = () => {
   const [modalNome, setModalNome] = useState('')
   const [modalCalorias, setModalCalorias] = useState('')
   const [modalDescricao, setModalDescricao] = useState('')
+  const [modalState, setModalState] = useState('')
 
   const handleCloseModal = () => {
     setShowModal(false)
   }
 
   const handleEditButton = () => {
+    setModalId('')
+    setModalNome('')
+    setModalCalorias('')
+    setModalDescricao('')
+    setModalState('')
     setShowModal(true)
   }
 
@@ -49,10 +55,40 @@ const Refeicao = () => {
     setModalNome('')
     setModalCalorias('')
     setModalDescricao('')
+    setModalState('new')
     setShowModal(true)
   }
 
   const handleModalSave = async () => {
+    if (modalState === '') {
+      EditSave()
+    } else if (modalState === 'new') {
+      newSave()
+    } else {
+    }
+  }
+
+  const newSave = async () => {
+    if (modalNome && modalCalorias && modalDescricao) {
+      setModalLoading(true)
+      const result = await api.addRefeicao({
+        nome: modalNome,
+        cal: modalCalorias,
+        descricao: modalDescricao,
+      })
+      setModalLoading(false)
+      if (result.error === '') {
+        setShowModal(false)
+        getList()
+      } else {
+        alert(result.error)
+      }
+    } else {
+      alert('Preencha os campos')
+    }
+  }
+
+  const EditSave = async () => {
     if (modalId && modalNome && modalCalorias && modalDescricao) {
       setModalLoading(true)
       const result = await api.updateRefeição(modalId, {
@@ -163,19 +199,21 @@ const Refeicao = () => {
       </CRow>
 
       <CModal visible={showModal} onClose={handleCloseModal}>
-        <CModalHeader closeButton>Editar Refeição</CModalHeader>
+        <CModalHeader closeButton>{modalState === 'new' ? 'Nova' : 'Edite'} Refeição</CModalHeader>
         <CModalBody>
-          <CInputGroup style={{ padding: '10px' }}>
-            <CInputGroupText htmlFor="modal-id">Id</CInputGroupText>
-            <CFormInput
-              type="text"
-              id="modal-id"
-              placeholder="Digite o id da refeição."
-              value={modalId}
-              onChange={(e) => setModalId(e.target.value)}
-              disabled={modalLoading}
-            />
-          </CInputGroup>
+          {modalState === 'new' ? null : (
+            <CInputGroup style={{ padding: '10px' }}>
+              <CInputGroupText htmlFor="modal-id">Id</CInputGroupText>
+              <CFormInput
+                type="text"
+                id="modal-id"
+                placeholder="Digite o id da refeição."
+                value={modalId}
+                onChange={(e) => setModalId(e.target.value)}
+                disabled={modalLoading}
+              />
+            </CInputGroup>
+          )}
 
           <CInputGroup style={{ padding: '10px' }}>
             <CInputGroupText htmlFor="modal-Nome">Nome</CInputGroupText>
