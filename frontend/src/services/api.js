@@ -80,5 +80,18 @@ export default () => {
       let json = await request('post', `/refeicao/add`, body)
       return json
     },
+    deleteRefeicao: async (id) => {
+      //
+      let token = localStorage.getItem('token')
+      let url = `${baseUrl}/refeicao/${id}?token=${token}`
+      let req = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      let json = await req.json()
+      return json
+    },
   }
 }

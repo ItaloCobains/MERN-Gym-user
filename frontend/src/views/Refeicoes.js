@@ -59,12 +59,40 @@ const Refeicao = () => {
     setShowModal(true)
   }
 
+  const handleRemoveButton = () => {
+    setModalId('')
+    setModalNome('')
+    setModalCalorias('')
+    setModalDescricao('')
+    setModalState('delete')
+    setShowModal(true)
+  }
+
   const handleModalSave = async () => {
     if (modalState === '') {
       EditSave()
     } else if (modalState === 'new') {
       newSave()
     } else {
+      deleteSave()
+    }
+  }
+
+  const deleteSave = async () => {
+    if (modalId) {
+      if (window.confirm('Tem certeza que deseja excluir ?')) {
+        setModalLoading(true)
+        const result = await api.deleteRefeicao(modalId)
+        setModalLoading(false)
+        if (result.error === '') {
+          setShowModal(false)
+          getList()
+        } else {
+          alert(result.error)
+        }
+      }
+    } else {
+      alert('Preencha os campos')
     }
   }
 
@@ -178,7 +206,7 @@ const Refeicao = () => {
                 <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
                 Editar Refeição
               </CButton>
-              <CButton color="danger">
+              <CButton color="danger" onClick={() => handleRemoveButton()}>
                 <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
                 Excluir Refeição
               </CButton>
@@ -198,68 +226,99 @@ const Refeicao = () => {
         </CCol>
       </CRow>
 
-      <CModal visible={showModal} onClose={handleCloseModal}>
-        <CModalHeader closeButton>{modalState === 'new' ? 'Nova' : 'Edite'} Refeição</CModalHeader>
-        <CModalBody>
-          {modalState === 'new' ? null : (
+      {modalState === 'delete' ? (
+        <CModal visible={showModal} onClose={handleCloseModal}>
+          <CModalHeader closeButton>Delete Refeição</CModalHeader>
+          <CModalBody>
+            {modalState === 'new' ? null : (
+              <CInputGroup style={{ padding: '10px' }}>
+                <CInputGroupText htmlFor="modal-id">Id</CInputGroupText>
+                <CFormInput
+                  type="text"
+                  id="modal-id"
+                  placeholder="Digite o id da refeição."
+                  value={modalId}
+                  onChange={(e) => setModalId(e.target.value)}
+                  disabled={modalLoading}
+                />
+              </CInputGroup>
+            )}
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="primary" onClick={handleModalSave} disabled={modalLoading}>
+              {modalLoading ? 'Carregando' : 'Deletar'}
+            </CButton>
+            <CButton color="secondary" onClick={handleCloseModal} disabled={modalLoading}>
+              Cancelar
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      ) : (
+        <CModal visible={showModal} onClose={handleCloseModal}>
+          <CModalHeader closeButton>
+            {modalState === 'new' ? 'Nova' : 'Edite'} Refeição
+          </CModalHeader>
+          <CModalBody>
+            {modalState === 'new' ? null : (
+              <CInputGroup style={{ padding: '10px' }}>
+                <CInputGroupText htmlFor="modal-id">Id</CInputGroupText>
+                <CFormInput
+                  type="text"
+                  id="modal-id"
+                  placeholder="Digite o id da refeição."
+                  value={modalId}
+                  onChange={(e) => setModalId(e.target.value)}
+                  disabled={modalLoading}
+                />
+              </CInputGroup>
+            )}
+
             <CInputGroup style={{ padding: '10px' }}>
-              <CInputGroupText htmlFor="modal-id">Id</CInputGroupText>
+              <CInputGroupText htmlFor="modal-Nome">Nome</CInputGroupText>
               <CFormInput
                 type="text"
-                id="modal-id"
-                placeholder="Digite o id da refeição."
-                value={modalId}
-                onChange={(e) => setModalId(e.target.value)}
+                id="modal-Nome"
+                placeholder="Digite o nome da refeição."
+                value={modalNome}
+                onChange={(e) => setModalNome(e.target.value)}
                 disabled={modalLoading}
               />
             </CInputGroup>
-          )}
 
-          <CInputGroup style={{ padding: '10px' }}>
-            <CInputGroupText htmlFor="modal-Nome">Nome</CInputGroupText>
-            <CFormInput
-              type="text"
-              id="modal-Nome"
-              placeholder="Digite o nome da refeição."
-              value={modalNome}
-              onChange={(e) => setModalNome(e.target.value)}
-              disabled={modalLoading}
-            />
-          </CInputGroup>
+            <CInputGroup style={{ padding: '10px' }}>
+              <CInputGroupText htmlFor="modal-Calorias">Calorias</CInputGroupText>
+              <CFormInput
+                type="number"
+                id="modal-Calorias"
+                placeholder="Digite as Calorias da refeição."
+                value={modalCalorias}
+                onChange={(e) => setModalCalorias(e.target.value)}
+                disabled={modalLoading}
+              />
+            </CInputGroup>
 
-          <CInputGroup style={{ padding: '10px' }}>
-            <CInputGroupText htmlFor="modal-Calorias">Calorias</CInputGroupText>
-            <CFormInput
-              type="number"
-              id="modal-Calorias"
-              placeholder="Digite as Calorias da refeição."
-              value={modalCalorias}
-              onChange={(e) => setModalCalorias(e.target.value)}
-              disabled={modalLoading}
-            />
-          </CInputGroup>
-
-          <CInputGroup style={{ padding: '10px' }}>
-            <CInputGroupText htmlFor="modal-Descricao">Descrição</CInputGroupText>
-            <CFormTextarea
-              type="text"
-              id="modal-Descricao"
-              placeholder="Digite as Calorias da refeição."
-              value={modalDescricao}
-              onChange={(e) => setModalDescricao(e.target.value)}
-              disabled={modalLoading}
-            />
-          </CInputGroup>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="primary" onClick={handleModalSave} disabled={modalLoading}>
-            {modalLoading ? 'Carregando' : 'Salvar'}
-          </CButton>
-          <CButton color="secondary" onClick={handleCloseModal} disabled={modalLoading}>
-            Cancelar
-          </CButton>
-        </CModalFooter>
-      </CModal>
+            <CInputGroup style={{ padding: '10px' }}>
+              <CInputGroupText htmlFor="modal-Descricao">Descrição</CInputGroupText>
+              <CFormTextarea
+                type="text"
+                id="modal-Descricao"
+                placeholder="Digite as Calorias da refeição."
+                value={modalDescricao}
+                onChange={(e) => setModalDescricao(e.target.value)}
+                disabled={modalLoading}
+              />
+            </CInputGroup>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="primary" onClick={handleModalSave} disabled={modalLoading}>
+              {modalLoading ? 'Carregando' : 'Salvar'}
+            </CButton>
+            <CButton color="secondary" onClick={handleCloseModal} disabled={modalLoading}>
+              Cancelar
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      )}
     </>
   )
 }

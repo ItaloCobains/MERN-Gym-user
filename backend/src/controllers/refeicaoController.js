@@ -221,9 +221,10 @@ module.exports = {
   },
   deleteItem: async (req, res) => {
     const { id } = req.params;
-    const { token } = req.params.token;
+    const { token } = req.query;
 
     const user = await User.findOne({ token }).exec();
+
 
     if (!user) {
       res.status(400).json({ error: 'Not Found' });
@@ -239,6 +240,6 @@ module.exports = {
 
     await Refeicao.findByIdAndDelete(id);
 
-    res.status(200).json({ status: true });
+    res.status(200).json({ error: '' });
   },
 };
