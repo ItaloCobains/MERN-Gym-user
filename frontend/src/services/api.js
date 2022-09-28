@@ -18,7 +18,6 @@ const request = async (method, endpoint, params, token = null) => {
     case 'get':
       let queryString = new URLSearchParams(params).toString()
       fullUrl += `?${queryString}`
-      console.log(fullUrl)
       break
     case 'post':
     case 'put':
@@ -91,6 +90,17 @@ export default () => {
         },
       })
       let json = await req.json()
+      return json
+    },
+    // /user/signup
+    register: async (nome, email, password, biotipo, peso) => {
+      let json = await request('post', '/user/signup', {
+        nome,
+        email,
+        password,
+        biotipo,
+        peso,
+      })
       return json
     },
   }

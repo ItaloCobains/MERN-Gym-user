@@ -106,7 +106,7 @@ module.exports = {
     });
     await newUser.save();
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, error: '' });
   },
 
   validate: async (req, res) => {

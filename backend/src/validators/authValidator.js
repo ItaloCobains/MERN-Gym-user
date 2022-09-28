@@ -6,9 +6,9 @@ module.exports = {
     nome: {
       trim: true,
       isLength: {
-        options: {min: 10},
+        options: {min: 5},
       },
-      errorMessage: 'Nome precisa ter pelo menos 10 caracteres.',
+      errorMessage: 'Nome precisa ter pelo menos 5 caracteres.',
     },
     email: {
       isEmail: true,
