@@ -1,7 +1,5 @@
-import CIcon from '@coreui/icons-react'
-
 import { cilCheck } from '@coreui/icons'
-
+import CIcon from '@coreui/icons-react'
 import {
   CButton,
   CCard,
@@ -9,7 +7,6 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
-  CFormLabel,
   CFormTextarea,
   CInputGroup,
   CInputGroupText,
@@ -21,49 +18,65 @@ import {
   CTable,
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
+import useApi from '../services/api'
 
-import useApi from './../services/api'
-
-const Refeicao = () => {
+export default function Treino() {
   const api = useApi()
 
   const [loading, setLoading] = useState(true)
   const [list, setList] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [modalLoading, setModalLoading] = useState(false)
-  const [modalId, setModalId] = useState('')
-  const [modalNome, setModalNome] = useState('')
-  const [modalCalorias, setModalCalorias] = useState('')
-  const [modalDescricao, setModalDescricao] = useState('')
   const [modalState, setModalState] = useState('')
 
+  const [diaDaSemana, setDiaDaSemana] = useState('')
+  const [modalId, setModalId] = useState('')
+  const [modalNome, setModalNome] = useState('')
+  const [modalRepetiçoes, setModalRepetiçoes] = useState(0)
+  const [modalCarga, setModalCarga] = useState('')
+
+  useEffect(() => {
+    getList()
+  }, [])
+
+  const getList = async () => {
+    setLoading(true)
+    const result = await api.getTreino()
+    setLoading(false)
+    if (result.treino) {
+      setList(result.treino)
+    } else {
+      alert(result.error)
+    }
+  }
   const handleCloseModal = () => {
     setShowModal(false)
   }
 
   const handleEditButton = () => {
     setModalId('')
+    setDiaDaSemana('')
     setModalNome('')
-    setModalCalorias('')
-    setModalDescricao('')
-    setModalState('')
+    setModalRepetiçoes(0)
+    setModalCarga('')
     setShowModal(true)
   }
 
   const handleNewButton = () => {
-    setModalId('')
+    setDiaDaSemana('')
     setModalNome('')
-    setModalCalorias('')
-    setModalDescricao('')
+    setModalRepetiçoes(0)
+    setModalCarga('')
     setModalState('new')
     setShowModal(true)
   }
 
   const handleRemoveButton = () => {
     setModalId('')
+    setDiaDaSemana('')
     setModalNome('')
-    setModalCalorias('')
-    setModalDescricao('')
+    setModalRepetiçoes(0)
+    setModalCarga('')
     setModalState('delete')
     setShowModal(true)
   }
@@ -82,7 +95,7 @@ const Refeicao = () => {
     if (modalId) {
       if (window.confirm('Tem certeza que deseja excluir ?')) {
         setModalLoading(true)
-        const result = await api.deleteRefeicao(modalId)
+        const result = await api.deleteTreino(modalId)
         setModalLoading(false)
         if (result.error === '') {
           setShowModal(false)
@@ -97,12 +110,13 @@ const Refeicao = () => {
   }
 
   const newSave = async () => {
-    if (modalNome && modalCalorias && modalDescricao) {
+    if (modalNome && modalRepetiçoes && modalCarga && diaDaSemana) {
       setModalLoading(true)
-      const result = await api.addRefeicao({
+      const result = await api.addTreino({
         nome: modalNome,
-        cal: modalCalorias,
-        descricao: modalDescricao,
+        diaDaSemana: diaDaSemana,
+        repetiçoes: modalRepetiçoes,
+        carga: modalCarga,
       })
       setModalLoading(false)
       if (result.error === '') {
@@ -117,12 +131,13 @@ const Refeicao = () => {
   }
 
   const EditSave = async () => {
-    if (modalId && modalNome && modalCalorias && modalDescricao) {
+    if (modalId && modalNome && modalRepetiçoes && modalCarga && diaDaSemana) {
       setModalLoading(true)
-      const result = await api.updateRefeição(modalId, {
+      const result = await api.updateTreino(modalId, {
         nome: modalNome,
-        cal: modalCalorias,
-        descricao: modalDescricao,
+        repetiçoes: modalRepetiçoes,
+        carga: modalCarga,
+        diaDaSemana: diaDaSemana,
       })
       setModalLoading(false)
       if (result.error === '') {
@@ -144,8 +159,8 @@ const Refeicao = () => {
       _style: { width: '1px' },
     },
     {
-      key: 'dateCreated',
-      label: 'Date de criação',
+      key: 'diaDaSemana',
+      label: 'Dia da Semana',
       _props: { scope: 'col' },
     },
     {
@@ -154,50 +169,28 @@ const Refeicao = () => {
       _props: { scope: 'col' },
     },
     {
-      key: 'cal',
-      label: 'Calorias',
+      key: 'repetiçoes',
+      label: 'Repetições',
       _props: { scope: 'col' },
       _style: { width: '1px' },
     },
     {
-      key: 'descricao',
-      label: 'Descrição',
+      key: 'carga',
+      label: 'Carga',
       _props: { scope: 'col' },
     },
-    // {
-    //   key: 'image',
-    //   label: 'Image',
-    //   _props: { scope: 'col' },
-    // },
   ]
-
-  useEffect(() => {
-    getList()
-  }, [])
-
-  const getList = async () => {
-    /* A React Hook that is used to set the state of the component. */
-    setLoading(true)
-    const result = await api.getRefeicao()
-    setLoading(false)
-    if (result.refeicao) {
-      setList(result.refeicao)
-    } else {
-      alert(result.error)
-    }
-  }
 
   return (
     <>
       <CRow>
         <CCol>
-          <h2>Refeições</h2>
-
+          <h2>Treino</h2>
           <CCard>
             <CCardHeader>
               <CButton color="primary" style={{ marginRight: '15px' }} onClick={handleNewButton}>
                 <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
-                Nova Refeição
+                Novo Treino
               </CButton>
               <CButton
                 color="info"
@@ -205,11 +198,11 @@ const Refeicao = () => {
                 style={{ marginRight: '15px' }}
               >
                 <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
-                Editar Refeição
+                Editar Treino
               </CButton>
               <CButton color="danger" onClick={() => handleRemoveButton()}>
                 <CIcon icon={cilCheck} style={{ marginRight: '5px' }} />
-                Excluir Refeição
+                Excluir Treino
               </CButton>
             </CCardHeader>
             <CCardBody>
@@ -229,7 +222,7 @@ const Refeicao = () => {
 
       {modalState === 'delete' ? (
         <CModal visible={showModal} onClose={handleCloseModal}>
-          <CModalHeader closeButton>Delete Refeição</CModalHeader>
+          <CModalHeader closeButton>Delete Treino</CModalHeader>
           <CModalBody>
             {modalState === 'new' ? null : (
               <CInputGroup style={{ padding: '10px' }}>
@@ -256,9 +249,7 @@ const Refeicao = () => {
         </CModal>
       ) : (
         <CModal visible={showModal} onClose={handleCloseModal}>
-          <CModalHeader closeButton>
-            {modalState === 'new' ? 'Nova' : 'Edite'} Refeição
-          </CModalHeader>
+          <CModalHeader closeButton>{modalState === 'new' ? 'Nova' : 'Edite'} Treino</CModalHeader>
           <CModalBody>
             {modalState === 'new' ? null : (
               <CInputGroup style={{ padding: '10px' }}>
@@ -287,25 +278,37 @@ const Refeicao = () => {
             </CInputGroup>
 
             <CInputGroup style={{ padding: '10px' }}>
-              <CInputGroupText htmlFor="modal-Calorias">Calorias</CInputGroupText>
+              <CInputGroupText htmlFor="modal-Dia da Semana">Dia da Semana</CInputGroupText>
               <CFormInput
-                type="number"
-                id="modal-Calorias"
-                placeholder="Digite as Calorias da refeição."
-                value={modalCalorias}
-                onChange={(e) => setModalCalorias(e.target.value)}
+                type="text"
+                id="modal-Dia da Semana"
+                placeholder="Digite o Dia da Semana"
+                value={diaDaSemana}
+                onChange={(e) => setDiaDaSemana(e.target.value)}
                 disabled={modalLoading}
               />
             </CInputGroup>
 
             <CInputGroup style={{ padding: '10px' }}>
-              <CInputGroupText htmlFor="modal-Descricao">Descrição</CInputGroupText>
-              <CFormTextarea
-                type="text"
-                id="modal-Descricao"
-                placeholder="Digite as Calorias da refeição."
-                value={modalDescricao}
-                onChange={(e) => setModalDescricao(e.target.value)}
+              <CInputGroupText htmlFor="modal-Repetições">Repetições</CInputGroupText>
+              <CFormInput
+                type="number"
+                id="modal-Repetições"
+                placeholder="Digite a quantidade de repetições."
+                value={modalRepetiçoes}
+                onChange={(e) => setModalRepetiçoes(e.target.value)}
+                disabled={modalLoading}
+              />
+            </CInputGroup>
+
+            <CInputGroup style={{ padding: '10px' }}>
+              <CInputGroupText htmlFor="modal-Carga">Carga</CInputGroupText>
+              <CFormInput
+                type="number"
+                id="modal-Carga"
+                placeholder="Digite as carga do treino."
+                value={modalCarga}
+                onChange={(e) => setModalCarga(e.target.value)}
                 disabled={modalLoading}
               />
             </CInputGroup>
@@ -323,5 +326,3 @@ const Refeicao = () => {
     </>
   )
 }
-
-export default Refeicao

@@ -31,7 +31,7 @@ module.exports = {
     newtreino.carga = carga;
 
     const info = await newtreino.save();
-    res.json({ id: info._id });
+    res.json({ id: info._id, error: '' });
   },
   getTreino: async (req, res) => {
     const { token } = req.query;
@@ -45,7 +45,7 @@ module.exports = {
       return;
     }
 
-    res.json({ treino });
+    res.json({ treino, error: '' });
   },
   getItem: async (req, res) => {
     const { id } = req.params;
@@ -69,7 +69,7 @@ module.exports = {
       carga: treino.carga,
     };
 
-    res.json({ resposta });
+    res.json({ resposta, error: '' });
   },
   editAction: async (req, res) => {
     let { id } = req.params;
@@ -138,6 +138,6 @@ module.exports = {
 
     await Treino.findByIdAndDelete(id);
 
-    res.status(200).json({ status: true });
+    res.status(200).json({ status: true, error: '' });
   },
 };

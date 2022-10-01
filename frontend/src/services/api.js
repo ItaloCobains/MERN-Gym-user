@@ -103,5 +103,43 @@ export default () => {
       })
       return json
     },
+    //  /treino/list
+    getTreino: async () => {
+      let token = localStorage.getItem('token')
+      let url = `${baseUrl}/treino/list?token=${token}`
+      let req = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      let json = await req.json()
+      return json
+    },
+    updateTreino: async (id, body) => {
+      let token = localStorage.getItem('token')
+      body = { ...body, token }
+      let json = await request('post', `/treino/${id}`, body)
+      return json
+    },
+    addTreino: async (body) => {
+      const token = localStorage.getItem('token')
+      body = { ...body, token }
+      let json = await request('post', `/treino/add`, body)
+      return json
+    },
+    deleteTreino: async (id) => {
+      //
+      let token = localStorage.getItem('token')
+      let url = `${baseUrl}/treino/${id}?token=${token}`
+      let req = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      let json = await req.json()
+      return json
+    },
   }
 }
