@@ -120,8 +120,6 @@ module.exports = {
     const { id } = req.params;
     const { token } = req.query;
 
-    console.log(token);
-
     const user = await User.findOne({ token }).exec();
 
     if (!user) {

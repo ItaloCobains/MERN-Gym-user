@@ -153,7 +153,7 @@ export default function Treino() {
 
   const fields = [
     {
-      key: 'id',
+      key: '_id',
       label: '#',
       _props: { scope: 'col' },
       _style: { width: '1px' },

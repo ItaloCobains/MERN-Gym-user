@@ -30,12 +30,7 @@ const _nav = [
     component: CNavTitle,
     name: 'Configuração',
   },
-  {
-    component: CNavItem,
-    name: 'Meu Perfil',
-    to: '/profile',
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-  },
+
   {
     component: CNavItem,
     name: 'Sair',
