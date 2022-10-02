@@ -4,7 +4,7 @@ const jimp = require('jimp');
 const User = require('../models/User');
 const Refeicao = require('../models/Refeicao');
 const { default: mongoose } = require('mongoose');
-
+const moment = require('moment');
 
 /**
  * It takes a buffer, creates a new name for the image, reads the buffer,
@@ -102,7 +102,8 @@ module.exports = {
         nome: refeicaoData[i].nome,
         cal: refeicaoData[i].cal,
         descricao: refeicaoData[i].descricao,
-        dateCreated: refeicaoData[i].dateCreated,
+        dateCreated: moment(refeicaoData[i].dateCreated)
+            .format('YYYY-MM-DD HH:mm'),
         image,
       });
     };
@@ -136,7 +137,7 @@ module.exports = {
       cal: refeicao.cal,
       images,
       descricao: refeicao.descricao,
-      dateCreated: refeicao.dateCreated,
+      dateCreated: moment(refeicao.dateCreated).format('YYYY-MM-DD HH:mm'),
     };
 
     res.status(200).json({
